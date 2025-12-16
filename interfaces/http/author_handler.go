@@ -75,20 +75,20 @@ func (h *AuthorHandler) GetByID(c *gin.Context) {
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /authors [post]
-func (h *AuthorHandler) Create(c *gin.Context) {
+func (authorHandler *AuthorHandler) Create(context *gin.Context) {
 	var input struct {
 		Name string `json:"name"`
 	}
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := context.ShouldBindJSON(&input); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	author, err := h.Command.CreateAuthor(input.Name)
+	author, err := authorHandler.Command.CreateAuthor(input.Name)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, author)
+	context.JSON(http.StatusCreated, author)
 }
 
 // @Summary Delete author
